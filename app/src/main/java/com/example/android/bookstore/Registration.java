@@ -6,8 +6,6 @@ import android.widget.Button;
 
 public class Registration extends AppCompatActivity {
 
-    private Button mButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
