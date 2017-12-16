@@ -1,5 +1,6 @@
 package com.example.android.bookstore;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class CustomerSignIn extends AppCompatActivity {
 
@@ -47,6 +49,8 @@ public class CustomerSignIn extends AppCompatActivity {
                             Customer customer = dataSnapshot.child(mUsername.getText().toString()).getValue(Customer.class);
                             if (customer.getPassword().equals(mPassword.getText().toString())) {
                                 Toast.makeText(CustomerSignIn.this, "Sign In Successfull", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(CustomerSignIn.this, CustomerMainScreen.class);
+                                startActivity(i);
                             } else {
                                 Toast.makeText(CustomerSignIn.this, "Sign In failed", Toast.LENGTH_SHORT).show();
                             }

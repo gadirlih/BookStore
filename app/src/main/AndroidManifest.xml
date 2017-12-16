@@ -21,7 +21,11 @@
         <activity android:name=".CustomerSignIn" />
         <activity android:name=".CustomerSignUp" />
         <activity android:name=".OwnerSignIn" />
-        <activity android:name=".OwnerSignUp"></activity>
+        <activity android:name=".OwnerSignUp" />
+        <activity
+            android:name=".CustomerMainScreen"
+            android:label="@string/title_activity_customer_main_screen" />
+        <activity android:name=".BookDetail"></activity>
     </application>
 
 </manifest>
