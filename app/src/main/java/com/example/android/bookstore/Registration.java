@@ -44,12 +44,18 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Intent i = new Intent(Registration.this, OwnerSignIn.class);
+                startActivity(i);
+
             }
         });
 
         mOwnerSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent i = new Intent(Registration.this, OwnerSignUp.class);
+                startActivity(i);
 
             }
         });

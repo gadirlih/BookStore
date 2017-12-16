@@ -8,14 +8,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.bookstore.Model.Customer;
-import com.example.android.bookstore.Model.Owner;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class CustomerSignUp extends AppCompatActivity {
+public class OwnerSignUp extends AppCompatActivity {
 
     EditText name, surname, username, phone, address, password;
     Button signUp;
@@ -23,20 +22,20 @@ public class CustomerSignUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custpmer_sign_up);
+        setContentView(R.layout.activity_owner_sign_up);
 
-        name = (EditText) findViewById(R.id.csuname);
-        surname = (EditText) findViewById(R.id.csusurname);
-        username = (EditText) findViewById(R.id.csuusername);
-        phone = (EditText) findViewById(R.id.csuphone);
-        address = (EditText) findViewById(R.id.csuaddress);
-        password = (EditText) findViewById(R.id.csupassword);
-        signUp = (Button) findViewById(R.id.csusignup);
+        name = (EditText) findViewById(R.id.osuname);
+        surname = (EditText) findViewById(R.id.osusurname);
+        username = (EditText) findViewById(R.id.osuusername);
+        phone = (EditText) findViewById(R.id.osuphone);
+        address = (EditText) findViewById(R.id.osuaddress);
+        password = (EditText) findViewById(R.id.osupassword);
+        signUp = (Button) findViewById(R.id.osusignup);
 
         //Inti Firebase
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        final DatabaseReference table_customer = db.getReference("Customer");
+        final DatabaseReference table_customer = db.getReference("Owner");
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +47,7 @@ public class CustomerSignUp extends AppCompatActivity {
                         //check if username already exists
 
                         if(username.getText().length() < 1 || dataSnapshot.child(username.getText().toString()).exists()){
-                            Toast.makeText(CustomerSignUp.this, "This username already exists; Try another one", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OwnerSignUp.this, "This username already exists; Try another one", Toast.LENGTH_SHORT).show();
                         }else{
 
                             Customer customer = new Customer(name.getText().toString(), surname.getText().toString(), password.getText().toString(),
