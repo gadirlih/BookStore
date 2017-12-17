@@ -148,6 +148,7 @@ public class CartFrahment extends Fragment {
                         Common.currentCustomer.getName(),
                         edtAddress.getText().toString(),
                         txtTotalPrice.getText().toString(),
+                        "0",
                         cart
                 );
                 //Submit to Firebase

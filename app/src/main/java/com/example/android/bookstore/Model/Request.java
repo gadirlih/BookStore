@@ -12,17 +12,27 @@ public class Request {
     private String Name;
     private String Address;
     private String Total;
+    private String Status;
     private List<Order> Books;  //List of food order
 
     public Request() {
     }
 
-    public Request(String phoneNumber, String name, String address, String total, List<Order> books) {
+    public Request(String phoneNumber, String name, String address, String total, String status, List<Order> books) {
         PhoneNumber = phoneNumber;
         Name = name;
         Address = address;
         Total = total;
+        Status = status;
         Books = books;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 
     public String getPhoneNumber() {

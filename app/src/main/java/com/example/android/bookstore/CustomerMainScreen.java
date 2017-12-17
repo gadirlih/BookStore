@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.android.bookstore.CustomerFragments.CartFrahment;
 import com.example.android.bookstore.CustomerFragments.HomeFragment;
 import com.example.android.bookstore.CustomerFragments.NotificationFragment;
+import com.example.android.bookstore.CustomerFragments.OrdersFragment;
 import com.example.android.bookstore.CustomerFragments.ProfileFragment;
 
 public class CustomerMainScreen extends AppCompatActivity {
@@ -38,6 +39,9 @@ public class CustomerMainScreen extends AppCompatActivity {
                     return true;
                 case R.id.navigation_cart:
                     fragmentTransaction.replace(R.id.customerFragmentLayout, new CartFrahment()).commit();
+                    return true;
+                case R.id.navigation_order:
+                    fragmentTransaction.replace(R.id.customerFragmentLayout, new OrdersFragment()).commit();
                     return true;
             }
             return false;
