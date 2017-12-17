@@ -25,7 +25,6 @@
         <activity
             android:name=".CustomerMainScreen"
             android:label="@string/title_activity_customer_main_screen" />
-        <activity android:name=".BookDetail"></activity>
     </application>
 
 </manifest>

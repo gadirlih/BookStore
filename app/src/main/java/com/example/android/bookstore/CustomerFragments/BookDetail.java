@@ -3,35 +3,35 @@ package com.example.android.bookstore.CustomerFragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.android.bookstore.CustomerMainScreen;
-import com.example.android.bookstore.Interfaces.ItemClickListener;
 import com.example.android.bookstore.Model.Book;
 import com.example.android.bookstore.R;
-import com.example.android.bookstore.ViewHolder.BookViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
+ * {@link BookDetail.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link BookDetail#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class BookDetail extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,15 +43,20 @@ public class HomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
+    TextView book_Name, book_Price, book_Description;
+    ImageView book_Image;
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    FloatingActionButton btnCart;
+    ElegantNumberButton numberButton;
+
+    String bookId="";
 
     FirebaseDatabase db;
-    DatabaseReference books_table_ref;
+    DatabaseReference books;
 
-    FirebaseRecyclerAdapter<Book, BookViewHolder> adapter;
+    Book currentBook;
 
-    public HomeFragment() {
+    public BookDetail() {
         // Required empty public constructor
     }
 
@@ -61,11 +66,11 @@ public class HomeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
+     * @return A new instance of fragment BookDetail.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    public static BookDetail newInstance(String param1, String param2) {
+        BookDetail fragment = new BookDetail();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -81,8 +86,9 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        //Firebase
         db = FirebaseDatabase.getInstance();
-        books_table_ref = db.getReference("Books");
+        books = db.getReference("Books");
 
 
     }
@@ -91,47 +97,53 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.custmer_recycler_book);
-        recyclerView.setHasFixedSize(true);
+        View view = inflater.inflate(R.layout.fragment_book_detail, container, false);
 
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        //Initialize view
+        numberButton = (ElegantNumberButton) view.findViewById(R.id.number_button);
+        btnCart = (FloatingActionButton) view.findViewById(R.id.btnCart);
 
-        loadBookLis();
+        book_Description = (TextView)view.findViewById(R.id.bdbook_description);
+        book_Name = (TextView)view.findViewById(R.id.bdbook_title);
+        book_Price = (TextView)view.findViewById(R.id.bdbook_price);
+        book_Image = (ImageView)view.findViewById(R.id.img_book);
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout)view.findViewById(R.id.collapsing);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+
+        getDetailFood(CustomerMainScreen.bookId);
 
         return view;
     }
 
-    private void loadBookLis(){
-
-        adapter = new FirebaseRecyclerAdapter<Book, BookViewHolder>(Book.class, R.layout.book_item,
-                BookViewHolder.class,
-                books_table_ref) {
+    private void getDetailFood(String bookId) {
+        books.child(bookId).addValueEventListener(new ValueEventListener() {
             @Override
-            protected void populateViewHolder(BookViewHolder viewHolder, Book model, int position) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentBook =dataSnapshot.getValue(Book.class);
 
-                viewHolder.book_title.setText(model.getTitle());
-                Picasso.with(getActivity()).load(model.getImage()).into(viewHolder.book_image);
-                final Book local = model;
-                viewHolder.setItemClickListener(new ItemClickListener() {
-                    @Override
-                    public void OnClick(View view, int position, boolean islongClick) {
+                //set Image
+                Picasso.with(getActivity()).load(currentBook.getImage())
+                        .into(book_Image);
 
-                        CustomerMainScreen.bookId = adapter.getRef(position).getKey();
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.customerFragmentLayout, new BookDetail()).addToBackStack(null).commit();
+                //collapsingToolbarLayout.setTitle(currentBook.getTitle());
 
-                    }
-                });
+                book_Price.setText(currentBook.getPrice());
+
+                book_Name.setText(currentBook.getTitle());
+
+                book_Description.setText("Author: " + currentBook.getAuthor() + "\n"
+                        + "Year: " + currentBook.getYear() + "\n"
+                        + "Category: " + currentBook.getCategory());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
-
-        recyclerView.setAdapter(adapter);
-
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -147,7 +159,7 @@ public class HomeFragment extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            Toast.makeText(context, "Home", Toast.LENGTH_SHORT).show();
+
         }
     }
 
