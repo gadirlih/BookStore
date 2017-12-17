@@ -18,6 +18,7 @@ import com.example.android.bookstore.CustomerFragments.ProfileFragment;
 public class CustomerMainScreen extends AppCompatActivity {
 
     public static String bookId;
+    public static String searchBookId;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

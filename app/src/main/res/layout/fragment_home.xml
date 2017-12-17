@@ -1,20 +1,29 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.android.bookstore.CustomerFragments.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="368dp"
-        android:layout_height="551dp"
-        android:id="@+id/custmer_recycler_book"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/csearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        app:mt_hint="Enter Book name"
+        app:mt_speechMode="false" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/custmer_recycler_book"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+         />
+
+</LinearLayout>

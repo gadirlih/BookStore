@@ -8,13 +8,17 @@
     android:orientation="vertical"
     tools:context="com.example.android.bookstore.CustomerMainScreen">
 
+
+
+
     <FrameLayout
         android:id="@+id/customerFragmentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        />
 
-    </FrameLayout>
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

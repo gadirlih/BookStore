@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,16 @@ import com.example.android.bookstore.Model.Book;
 import com.example.android.bookstore.R;
 import com.example.android.bookstore.ViewHolder.BookViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +59,10 @@ public class HomeFragment extends Fragment {
     DatabaseReference books_table_ref;
 
     FirebaseRecyclerAdapter<Book, BookViewHolder> adapter;
+
+    FirebaseRecyclerAdapter<Book, BookViewHolder> searchAdapter;
+    List<String> suggestList = new ArrayList<>();
+    MaterialSearchBar materialSearchBar;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -101,7 +114,116 @@ public class HomeFragment extends Fragment {
 
         loadBookLis();
 
+        materialSearchBar = (MaterialSearchBar)view.findViewById(R.id.csearchBar);
+        materialSearchBar.setHint("Enter Book name");
+
+        loadSuggest();
+        materialSearchBar.setLastSuggestions(suggestList);
+        materialSearchBar.setCardViewElevation(10);
+        materialSearchBar.addTextChangeListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                List<String> suggest = new ArrayList<String>();
+                for(String search:suggestList){
+                    if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase())){
+                        suggest.add(search);
+                    }
+                }
+                materialSearchBar.setLastSuggestions(suggest);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                List<String> suggest = new ArrayList<String>();
+                for(String search:suggestList){
+                    if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase())){
+                        suggest.add(search);
+                    }
+                }
+                materialSearchBar.setLastSuggestions(suggest);
+
+            }
+        });
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled){
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+
+                startSearch(text);
+
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+
         return view;
+    }
+
+    private void startSearch(CharSequence text){
+
+        searchAdapter = new FirebaseRecyclerAdapter<Book, BookViewHolder>(
+                Book.class,
+                R.layout.book_item,
+                BookViewHolder.class,
+                books_table_ref.orderByChild("Title").equalTo(text.toString())
+        ) {
+            @Override
+            protected void populateViewHolder(BookViewHolder viewHolder, Book model, int position) {
+
+                viewHolder.book_title.setText(model.getTitle());
+                Picasso.with(getActivity()).load(model.getImage()).into(viewHolder.book_image);
+                final Book local = model;
+                viewHolder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void OnClick(View view, int position, boolean islongClick) {
+
+                        CustomerMainScreen.bookId = searchAdapter.getRef(position).getKey();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.customerFragmentLayout, new BookDetail()).addToBackStack(null).commit();
+
+                    }
+                });
+            }
+        };
+
+        recyclerView.setAdapter(searchAdapter);
+    }
+
+    private void loadSuggest(){
+
+        books_table_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot:dataSnapshot.getChildren()){
+                    Book item = postSnapshot.getValue(Book.class);
+                    suggestList.add(item.getTitle());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void loadBookLis(){
