@@ -142,28 +142,23 @@ public class HomeFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                List<String> suggest = new ArrayList<String>();
-                for(String search:suggestList){
-                    if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase())){
-                        suggest.add(search);
-                    }
-                }
-                materialSearchBar.setLastSuggestions(suggest);
 
             }
         });
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
-                if(!enabled){
+                /*if(!enabled){
                     recyclerView.setAdapter(adapter);
-                }
+                }*/
             }
 
             @Override
             public void onSearchConfirmed(CharSequence text) {
 
                 startSearch(text);
+                materialSearchBar.disableSearch();
+                //materialSearchBar.setText("");
 
             }
 
