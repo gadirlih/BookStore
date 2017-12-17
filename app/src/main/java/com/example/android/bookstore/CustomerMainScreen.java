@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.android.bookstore.CustomerFragments.CartFrahment;
 import com.example.android.bookstore.CustomerFragments.HomeFragment;
 import com.example.android.bookstore.CustomerFragments.NotificationFragment;
 import com.example.android.bookstore.CustomerFragments.ProfileFragment;
@@ -34,6 +35,9 @@ public class CustomerMainScreen extends AppCompatActivity {
                     return true;
                 case R.id.navigation_notifications:
                     fragmentTransaction.replace(R.id.customerFragmentLayout, new NotificationFragment()).commit();
+                    return true;
+                case R.id.navigation_cart:
+                    fragmentTransaction.replace(R.id.customerFragmentLayout, new CartFrahment()).commit();
                     return true;
             }
             return false;

@@ -6,18 +6,28 @@ package com.example.android.bookstore.Model;
 
 public class Book {
     private String Image;
-    private String Title, Author, Category, Year, Price;
+    private String Title, Author, Category, Year, Price, Bookstore;
 
     public Book() {
     }
 
-    public Book(String image, String title, String author, String category, String year, String price) {
+
+    public Book(String image, String title, String author, String category, String year, String price, String bookstore) {
         Image = image;
         Title = title;
         Author = author;
         Category = category;
         Year = year;
         Price = price;
+        Bookstore = bookstore;
+    }
+
+    public String getBookstore() {
+        return Bookstore;
+    }
+
+    public void setBookstore(String bookstore) {
+        Bookstore = bookstore;
     }
 
     public String getImage() {

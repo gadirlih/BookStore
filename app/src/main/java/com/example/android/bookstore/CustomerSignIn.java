@@ -50,6 +50,7 @@ public class CustomerSignIn extends AppCompatActivity {
                             if (customer.getPassword().equals(mPassword.getText().toString())) {
                                 Toast.makeText(CustomerSignIn.this, "Sign In Successfull", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(CustomerSignIn.this, CustomerMainScreen.class);
+                                Common.currentCustomer = customer;
                                 startActivity(i);
                             } else {
                                 Toast.makeText(CustomerSignIn.this, "Sign In failed", Toast.LENGTH_SHORT).show();

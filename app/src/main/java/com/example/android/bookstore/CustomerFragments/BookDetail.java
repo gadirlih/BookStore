@@ -11,10 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.android.bookstore.CustomerMainScreen;
+import com.example.android.bookstore.Database.Database;
 import com.example.android.bookstore.Model.Book;
+import com.example.android.bookstore.Model.Order;
 import com.example.android.bookstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -104,6 +107,20 @@ public class BookDetail extends Fragment {
         numberButton = (ElegantNumberButton) view.findViewById(R.id.number_button);
         btnCart = (FloatingActionButton) view.findViewById(R.id.btnCart);
 
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Database(getActivity()).addToCart(new Order(
+                        bookId,
+                        currentBook.getTitle(),
+                        numberButton.getNumber(),
+                        currentBook.getPrice(),
+                        currentBook.getBookstore()
+                ));
+                Toast.makeText(getActivity(), "Added To Cart", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         book_Description = (TextView)view.findViewById(R.id.bdbook_description);
         book_Name = (TextView)view.findViewById(R.id.bdbook_title);
         book_Price = (TextView)view.findViewById(R.id.bdbook_price);
@@ -113,12 +130,12 @@ public class BookDetail extends Fragment {
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
-        getDetailFood(CustomerMainScreen.bookId);
+        getBookDetails(CustomerMainScreen.bookId);
 
         return view;
     }
 
-    private void getDetailFood(String bookId) {
+    private void getBookDetails(String bookId) {
         books.child(bookId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,7 +153,8 @@ public class BookDetail extends Fragment {
 
                 book_Description.setText("Author: " + currentBook.getAuthor() + "\n"
                         + "Year: " + currentBook.getYear() + "\n"
-                        + "Category: " + currentBook.getCategory());
+                        + "Category: " + currentBook.getCategory() + "\n"
+                        + "Bookstore: " + currentBook.getBookstore());
             }
 
             @Override
