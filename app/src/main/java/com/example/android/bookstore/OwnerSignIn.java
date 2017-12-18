@@ -1,5 +1,6 @@
 package com.example.android.bookstore;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -48,6 +49,9 @@ public class OwnerSignIn extends AppCompatActivity {
                             Owner owner = dataSnapshot.child(mUsername.getText().toString()).getValue(Owner.class);
                             if (owner.getPassword().equals(mPassword.getText().toString())) {
                                 Toast.makeText(OwnerSignIn.this, "Sign In Successfull", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(OwnerSignIn.this, OwnerMainScreen.class);
+                                Common.currentOwner = owner;
+                                startActivity(i);
                             } else {
                                 Toast.makeText(OwnerSignIn.this, "Sign In failed", Toast.LENGTH_SHORT).show();
                             }

@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.bookstore.Model.Customer;
+import com.example.android.bookstore.Model.Owner;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,13 +36,13 @@ public class OwnerSignUp extends AppCompatActivity {
         //Inti Firebase
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        final DatabaseReference table_customer = db.getReference("Owner");
+        final DatabaseReference table_owner = db.getReference("Owner");
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                table_customer.addValueEventListener(new ValueEventListener() {
+                table_owner.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //check if username already exists
@@ -50,9 +51,9 @@ public class OwnerSignUp extends AppCompatActivity {
                             Toast.makeText(OwnerSignUp.this, "This username already exists; Try another one", Toast.LENGTH_SHORT).show();
                         }else{
 
-                            Customer customer = new Customer(name.getText().toString(), surname.getText().toString(), password.getText().toString(),
-                                    address.getText().toString(),phone.getText().toString());
-                            table_customer.child(username.getText().toString()).setValue(customer);
+                            Owner owner = new Owner(name.getText().toString(), surname.getText().toString(), password.getText().toString(),
+                                    username.getText().toString(), address.getText().toString(),phone.getText().toString());
+                            table_owner.child(username.getText().toString()).setValue(owner);
                             finish();
 
                         }

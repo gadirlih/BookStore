@@ -10,4 +10,6 @@ import com.example.android.bookstore.Model.Owner;
 public class Common {
     public static Customer currentCustomer;
     public static Owner currentOwner;
+    public static boolean isCustomer = false;
+    public static final int PICK_IMAGE_REQUEST = 71;
 }

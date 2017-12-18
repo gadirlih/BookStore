@@ -14,10 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.android.bookstore.Common;
 import com.example.android.bookstore.CustomerMainScreen;
 import com.example.android.bookstore.Database.Database;
 import com.example.android.bookstore.Model.Book;
 import com.example.android.bookstore.Model.Order;
+import com.example.android.bookstore.OwnerMainScreen;
 import com.example.android.bookstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -91,7 +93,11 @@ public class BookDetail extends Fragment {
 
         //Firebase
         db = FirebaseDatabase.getInstance();
-        books = db.getReference("Books");
+
+        if(Common.isCustomer)
+            books = db.getReference("Books");
+        else
+            books = db.getReference(Common.currentOwner.getUsername());
 
 
     }
@@ -130,7 +136,10 @@ public class BookDetail extends Fragment {
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
-        getBookDetails(CustomerMainScreen.bookId);
+        if(Common.isCustomer)
+            getBookDetails(CustomerMainScreen.bookId);
+        else
+            getBookDetails(OwnerMainScreen.bookId);
 
         return view;
     }
@@ -139,7 +148,7 @@ public class BookDetail extends Fragment {
         books.child(bookId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                currentBook =dataSnapshot.getValue(Book.class);
+                currentBook = dataSnapshot.getValue(Book.class);
 
                 //set Image
                 Picasso.with(getActivity()).load(currentBook.getImage())

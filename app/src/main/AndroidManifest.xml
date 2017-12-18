@@ -25,6 +25,9 @@
         <activity
             android:name=".CustomerMainScreen"
             android:label="@string/title_activity_customer_main_screen" />
+        <activity
+            android:name=".OwnerMainScreen"
+            android:label="@string/title_activity_owner_main_screen"></activity>
     </application>
 
 </manifest>

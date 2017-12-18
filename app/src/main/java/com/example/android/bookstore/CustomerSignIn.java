@@ -51,6 +51,7 @@ public class CustomerSignIn extends AppCompatActivity {
                                 Toast.makeText(CustomerSignIn.this, "Sign In Successfull", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(CustomerSignIn.this, CustomerMainScreen.class);
                                 Common.currentCustomer = customer;
+                                Common.isCustomer = true;
                                 startActivity(i);
                             } else {
                                 Toast.makeText(CustomerSignIn.this, "Sign In failed", Toast.LENGTH_SHORT).show();
