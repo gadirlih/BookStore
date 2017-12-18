@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.bookstore.Common;
 import com.example.android.bookstore.CustomerSignIn;
 import com.example.android.bookstore.R;
+import com.example.android.bookstore.Registration;
 
 import io.paperdb.Paper;
 
@@ -36,7 +39,8 @@ public class ProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private Button btnSignOut;
+    Button btnSignOut;
+    TextView pName, pSurname, pAddress, pPhoneNumber, pUsername;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -75,16 +79,29 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        btnSignOut = (Button)view.findViewById(R.id.btn_sign_out);
+        pUsername = (TextView)view.findViewById(R.id.cpusername);
+        pName = (TextView)view.findViewById(R.id.cpNametxt);
+        pSurname = (TextView)view.findViewById(R.id.cpSurnametxt);
+        pAddress = (TextView)view.findViewById(R.id.cpAddresstxt);
+        pPhoneNumber = (TextView)view.findViewById(R.id.cpPhonetxt);
+
+        btnSignOut = (Button)view.findViewById(R.id.cp_sign_out);
+
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Paper.book().destroy();
-                Intent i = new Intent(getActivity(), CustomerSignIn.class);
+                Intent i = new Intent(getActivity(), Registration.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Paper.book().destroy();
                 startActivity(i);
             }
         });
+
+        pUsername.setText(Common.currentCustomer.getUsername());
+        pName.setText(Common.currentCustomer.getName());
+        pSurname.setText(Common.currentCustomer.getSurname());
+        pAddress.setText(Common.currentCustomer.getAddress());
+        pPhoneNumber.setText(Common.currentCustomer.getPhoneNumber());
 
         return view;
     }

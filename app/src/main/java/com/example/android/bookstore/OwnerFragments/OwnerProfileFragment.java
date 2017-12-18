@@ -1,14 +1,22 @@
 package com.example.android.bookstore.OwnerFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.android.bookstore.Common;
 import com.example.android.bookstore.R;
+import com.example.android.bookstore.Registration;
+
+import io.paperdb.Paper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +37,9 @@ public class OwnerProfileFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    Button btnSignOut;
+    TextView pName, pSurname, pAddress, pPhoneNumber, pUsername;
 
     public OwnerProfileFragment() {
         // Required empty public constructor
@@ -65,7 +76,33 @@ public class OwnerProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_owner_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_owner_profile, container, false);
+
+        pUsername = (TextView)view.findViewById(R.id.pusername);
+        pName = (TextView)view.findViewById(R.id.pNametxt);
+        pSurname = (TextView)view.findViewById(R.id.pSurnametxt);
+        pAddress = (TextView)view.findViewById(R.id.pAddresstxt);
+        pPhoneNumber = (TextView)view.findViewById(R.id.pPhonetxt);
+
+        btnSignOut = (Button)view.findViewById(R.id.op_sign_out);
+
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), Registration.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Paper.book().destroy();
+                startActivity(i);
+            }
+        });
+
+        pUsername.setText(Common.currentOwner.getUsername());
+        pName.setText(Common.currentOwner.getName());
+        pSurname.setText(Common.currentOwner.getSurname());
+        pAddress.setText(Common.currentOwner.getAddress());
+        pPhoneNumber.setText(Common.currentOwner.getPhoneNumber());
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

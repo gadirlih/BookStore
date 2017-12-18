@@ -6,80 +6,71 @@ package com.example.android.bookstore.Model;
 
 public class Customer {
 
-    private String ID;
-    private String Name;
-    private String Surname;
-    private String Password;
-    private String Username;
-    private String Address;
-    private String PhoneNumber;
-
-
-    public Customer(String name, String surname, String password, String address, String phoneNumber) {
-        Name = name;
-        Surname = surname;
-        Password = password;
-        Address = address;
-        PhoneNumber = phoneNumber;
-    }
+    //private String ID;
+    private String name;
+    private String surname;
+    private String password;
+    private String username;
+    private String address;
+    private String phoneNumber;
 
     public Customer() {
     }
 
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
+    public Customer(String name, String surname, String password, String username, String address, String phoneNumber) {
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+        this.username = username;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getSurname() {
-        return Surname;
+        return surname;
     }
 
     public void setSurname(String surname) {
-        Surname = surname;
+        this.surname = surname;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
-
 }

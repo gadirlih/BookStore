@@ -21,7 +21,7 @@ import io.paperdb.Paper;
 
 public class OwnerSignIn extends AppCompatActivity {
 
-    EditText mUsername, mPassword;
+    EditText username, password;
     Button mSignIn;
     CheckBox ckbRemember;
 
@@ -30,9 +30,9 @@ public class OwnerSignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_sign_in);
 
-        mUsername = (EditText) findViewById(R.id.osusername);
-        mPassword = (EditText) findViewById(R.id.ospassword);
-        mSignIn = (Button) findViewById(R.id.ossignin);
+        username = (EditText) findViewById(R.id.osignusername);
+        password = (EditText) findViewById(R.id.osignpassword);
+        mSignIn = (Button) findViewById(R.id.osignsignin);
         ckbRemember = (CheckBox) findViewById(R.id.ckb_remember_owner);
 
         Paper.init(this);
@@ -48,36 +48,65 @@ public class OwnerSignIn extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(ckbRemember.isChecked()){
-                    Paper.book().write(Common.USER_KEY, mUsername.getText().toString());
-                    Paper.book().write(Common.PWD_KEY, mPassword.getText().toString());
-                }
-                table_owner.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                if(validate()){
 
-                        if(dataSnapshot.child(mUsername.getText().toString()).exists()) {
-                            //Get User info
-                            Owner owner = dataSnapshot.child(mUsername.getText().toString()).getValue(Owner.class);
-                            if (owner.getPassword().equals(mPassword.getText().toString())) {
+                    if(ckbRemember.isChecked()){
+                        Paper.book().write(Common.USER_KEY, username.getText().toString());
+                        Paper.book().write(Common.PWD_KEY, password.getText().toString());
+                    }
+                    table_owner.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                Intent i = new Intent(OwnerSignIn.this, OwnerMainScreen.class);
-                                Common.currentOwner = owner;
-                                Paper.book().write(Common.LAST_KEY, ("2").toString());
-                                startActivity(i);
+                            if(dataSnapshot.child(username.getText().toString()).exists()) {
+                                //Get User info
+                                Owner owner = dataSnapshot.child(username.getText().toString()).getValue(Owner.class);
+                                if (owner.getPassword().equals(password.getText().toString())) {
+
+                                    Intent i = new Intent(OwnerSignIn.this, OwnerMainScreen.class);
+                                    Common.currentOwner = owner;
+                                    Paper.book().write(Common.LAST_KEY, ("2").toString());
+                                    startActivity(i);
+                                }else{
+                                    password.setError("Wrong password");
+                                }
+                            }else{
+                                username.setError("Wrong username");
                             }
-                        }else{
-                            Toast.makeText(OwnerSignIn.this, "Wrong password", Toast.LENGTH_SHORT).show();
+
                         }
 
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
 
-                    }
-                });
+                }
             }
         });
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+
+        String tusername = username.getText().toString();
+        String tpassword = password.getText().toString();
+
+        if (tusername.isEmpty() || tusername.length() < 3) {
+            username.setError("at least 3 characters");
+            valid = false;
+        } else {
+            username.setError(null);
+        }
+
+        if (tpassword.isEmpty() ||tpassword.length() < 4 || tpassword.length() > 20) {
+            password.setError("between 4 and 10 alphanumeric characters");
+            valid = false;
+        } else {
+            password.setError(null);
+        }
+
+        return valid;
     }
 }

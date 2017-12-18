@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.android.bookstore.Registration">
 
     <Button
         android:id="@+id/customer_signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Customer Sign In"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/customer_signup" />
-
-    <Button
-        android:id="@+id/owner_signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Owner Sign In"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/owner_signup" />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#006064"
+        android:textColor="@android:color/white"
+        android:text="Customer SignIn"
+        android:textSize="24sp"/>
 
     <Button
         android:id="@+id/customer_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cutomer Sign Up"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="44dp" />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Customer Sign Up"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:background="#C6FF00"/>
+
+    <Button
+        android:id="@+id/owner_signin"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="24sp"
+        android:background="#311B92"
+        android:textColor="@android:color/white"
+        android:text="Owner Sign In"/>
 
     <Button
         android:id="@+id/owner_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Owner Sign Up"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="44dp" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="24sp"
+        android:background="#039BE5"
+        android:textColor="@android:color/black"
+        android:text="Owner SignUp"/>
+</LinearLayout>
