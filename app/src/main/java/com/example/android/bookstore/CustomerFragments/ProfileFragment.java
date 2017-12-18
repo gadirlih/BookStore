@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.example.android.bookstore.CustomerSignIn;
 import com.example.android.bookstore.R;
 
+import io.paperdb.Paper;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -77,6 +79,7 @@ public class ProfileFragment extends Fragment {
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Paper.book().destroy();
                 Intent i = new Intent(getActivity(), CustomerSignIn.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);

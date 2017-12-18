@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import com.rey.material.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,10 +17,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import io.paperdb.Paper;
+
 public class OwnerSignIn extends AppCompatActivity {
 
     EditText mUsername, mPassword;
     Button mSignIn;
+    CheckBox ckbRemember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,9 @@ public class OwnerSignIn extends AppCompatActivity {
         mUsername = (EditText) findViewById(R.id.osusername);
         mPassword = (EditText) findViewById(R.id.ospassword);
         mSignIn = (Button) findViewById(R.id.ossignin);
+        ckbRemember = (CheckBox) findViewById(R.id.ckb_remember_owner);
+
+        Paper.init(this);
 
         //Inti Firebase
 
@@ -40,23 +47,27 @@ public class OwnerSignIn extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+
+                if(ckbRemember.isChecked()){
+                    Paper.book().write(Common.USER_KEY, mUsername.getText().toString());
+                    Paper.book().write(Common.PWD_KEY, mPassword.getText().toString());
+                }
                 table_owner.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if(mUsername.getText().length()>0 && mPassword.getText().length()>0 && dataSnapshot.child(mUsername.getText().toString()).exists()) {
+                        if(dataSnapshot.child(mUsername.getText().toString()).exists()) {
                             //Get User info
                             Owner owner = dataSnapshot.child(mUsername.getText().toString()).getValue(Owner.class);
                             if (owner.getPassword().equals(mPassword.getText().toString())) {
-                                Toast.makeText(OwnerSignIn.this, "Sign In Successfull", Toast.LENGTH_SHORT).show();
+
                                 Intent i = new Intent(OwnerSignIn.this, OwnerMainScreen.class);
                                 Common.currentOwner = owner;
+                                Paper.book().write(Common.LAST_KEY, ("2").toString());
                                 startActivity(i);
-                            } else {
-                                Toast.makeText(OwnerSignIn.this, "Sign In failed", Toast.LENGTH_SHORT).show();
                             }
                         }else{
-                            Toast.makeText(OwnerSignIn.this, "Wrong username or password", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OwnerSignIn.this, "Wrong password", Toast.LENGTH_SHORT).show();
                         }
 
                     }
